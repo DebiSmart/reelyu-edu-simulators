@@ -10,23 +10,16 @@
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     background: #F0EFF8;
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 32px 16px 48px;
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: flex-start; padding: 32px 16px 48px;
   }
-
   .sim-title {
     font-size: 13px; font-weight: 600; color: #7F77DD;
     letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 18px;
   }
-
   .phone-wrap { width: 100%; max-width: 380px; }
-
   .phone {
-    width: 100%; height: 680px;
-    background: #F6F6F9;
+    width: 100%; height: 680px; background: #F6F6F9;
     border-radius: 40px;
     box-shadow: 0 24px 64px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.08);
     display: flex; flex-direction: column; overflow: hidden;
@@ -34,14 +27,8 @@
   }
 
   /* HEADER */
-  .phone-header {
-    background: #fff; padding: 14px 16px 0;
-    flex-shrink: 0; border-bottom: 0.5px solid #E8E8EC;
-  }
-  .header-row {
-    display: flex; align-items: center;
-    justify-content: space-between; margin-bottom: 10px;
-  }
+  .phone-header { background: #fff; padding: 14px 16px 0; flex-shrink: 0; border-bottom: 0.5px solid #E8E8EC; }
+  .header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
   .level-label { font-size: 12px; font-weight: 700; color: #7F77DD; letter-spacing: 0.05em; text-transform: uppercase; }
   .level-sub { font-size: 11px; color: #999; margin-top: 1px; }
   .restart-btn {
@@ -55,22 +42,20 @@
 
   /* FEED */
   .feed {
-    flex: 1; overflow-y: auto;
-    padding: 16px 14px 8px;
-    display: flex; flex-direction: column; gap: 14px;
-    scroll-behavior: smooth;
+    flex: 1; overflow-y: auto; padding: 16px 14px 8px;
+    display: flex; flex-direction: column; gap: 14px; scroll-behavior: smooth;
   }
   .feed::-webkit-scrollbar { width: 3px; }
   .feed::-webkit-scrollbar-thumb { background: #D0CEF0; border-radius: 2px; }
 
   /* CONTAINER ANIMATION */
-  .container-row {
-    display: flex; gap: 8px;
-    animation: slideUp 280ms ease forwards;
-    opacity: 0;
+  .container-row, .mcq-row {
+    animation: slideUp 280ms ease forwards; opacity: 0;
     transition: opacity 0.4s ease, filter 0.4s ease;
   }
-  .container-row.faded { opacity: 0.15; filter: grayscale(50%); }
+  .container-row { display: flex; gap: 8px; }
+  .mcq-row { display: flex; flex-direction: row-reverse; gap: 8px; }
+  .container-row.faded, .mcq-row.faded { opacity: 0.15; filter: grayscale(50%); }
   @keyframes slideUp {
     from { opacity: 0; transform: translateY(16px); }
     to   { opacity: 1; transform: translateY(0); }
@@ -78,66 +63,52 @@
 
   /* AVATARS */
   .pico-avatar {
-    width: 32px; height: 32px; border-radius: 50%;
-    background: #C8E6C9; flex-shrink: 0;
+    width: 32px; height: 32px; border-radius: 50%; background: #C8E6C9; flex-shrink: 0;
     display: flex; align-items: center; justify-content: center; margin-top: 2px;
   }
   .pico-dot { width: 10px; height: 10px; border-radius: 50%; background: #4CAF50; }
-
   .user-avatar {
-    width: 32px; height: 32px; border-radius: 50%;
-    background: #F0EFF8; flex-shrink: 0;
-    border: 1.5px dashed #B0ADE0;
-    display: flex; align-items: center; justify-content: center; margin-top: 2px;
+    width: 32px; height: 32px; border-radius: 50%; background: #F0EFF8; flex-shrink: 0;
+    border: 1.5px dashed #B0ADE0; display: flex; align-items: center; justify-content: center; margin-top: 2px;
   }
 
   /* BUBBLE */
   .bubble-wrap { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
   .speech-bubble {
     background: #fff; border: 0.5px solid #E0DFF0;
-    border-radius: 4px 14px 14px 14px;
-    padding: 10px 12px;
+    border-radius: 4px 14px 14px 14px; padding: 10px 12px;
     font-size: 13.5px; line-height: 1.55; color: #2A2840;
     white-space: normal; word-wrap: break-word;
   }
   .bubble-inner { display: flex; align-items: flex-start; gap: 6px; }
   .speaker-icon {
-    width: 16px; height: 16px; border-radius: 4px;
-    background: #4A7EDE; flex-shrink: 0;
+    width: 16px; height: 16px; border-radius: 4px; background: #4A7EDE; flex-shrink: 0;
     display: flex; align-items: center; justify-content: center; margin-top: 2px;
   }
   .bubble-text { flex: 1; min-width: 0; }
-  .bubble-text span { opacity: 0; transition: opacity 0.05s; }
+  .bubble-text span { opacity: 0; }
 
-  /* IMAGE */
-  .media-image {
-    width: 100%; border-radius: 12px;
-    display: block; object-fit: cover;
-    max-height: 200px;
-    border: 0.5px solid #E0DFF0;
-  }
+  /* ACTUAL MEDIA */
+  .media-image { width: 100%; border-radius: 12px; display: block; object-fit: cover; max-height: 200px; border: 0.5px solid #E0DFF0; }
+  .media-video { width: 100%; border-radius: 12px; display: block; object-fit: cover; max-height: 200px; background: #000; }
 
-  /* VIDEO */
-  .media-video {
+  /* PLACEHOLDER */
+  .media-placeholder {
     width: 100%; border-radius: 12px;
-    display: block; object-fit: cover;
-    max-height: 200px;
-    background: #000;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; gap: 7px; padding: 26px 16px;
+    border: 1.5px dashed #C8C6E8; background: #FAFAFF;
+    color: #A09CC8; font-size: 12px; text-align: center; line-height: 1.45;
   }
+  .placeholder-label { font-size: 10px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 2px; }
+  .placeholder-path { font-size: 11px; color: #C0BCE8; font-family: monospace; word-break: break-all; }
 
   /* MCQ */
-  .mcq-row {
-    display: flex; flex-direction: row-reverse; gap: 8px;
-    animation: slideUp 280ms ease forwards; opacity: 0;
-    transition: opacity 0.4s ease, filter 0.4s ease;
-  }
-  .mcq-row.faded { opacity: 0.15; filter: grayscale(50%); }
   .mcq-wrap { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 7px; align-items: flex-end; }
   .mcq-question { font-size: 13.5px; font-weight: 500; color: #2A2840; text-align: right; line-height: 1.45; word-wrap: break-word; }
   .mcq-option {
-    width: 100%; background: #fff; border: 0.5px solid #D8D6EE;
-    border-radius: 10px; padding: 9px 12px;
-    font-size: 13px; line-height: 1.45; color: #2A2840;
+    width: 100%; background: #fff; border: 0.5px solid #D8D6EE; border-radius: 10px;
+    padding: 9px 12px; font-size: 13px; line-height: 1.45; color: #2A2840;
     text-align: left; cursor: pointer;
     transition: background 0.2s, border-color 0.2s, opacity 0.2s;
     word-wrap: break-word; white-space: normal;
@@ -148,29 +119,20 @@
   .mcq-option:disabled { cursor: default; }
 
   /* FOOTER */
-  .phone-footer {
-    background: #fff; border-top: 0.5px solid #E8E8EC;
-    padding: 10px 14px 14px; flex-shrink: 0;
-  }
+  .phone-footer { background: #fff; border-top: 0.5px solid #E8E8EC; padding: 10px 14px 14px; flex-shrink: 0; }
   .footer-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 9px; }
   .type-badge { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px; letter-spacing: 0.03em; }
   .step-counter { font-size: 11px; color: #999; font-weight: 500; }
   .continue-btn {
-    width: 100%; padding: 12px;
-    background: #7F77DD; color: #fff;
-    border: none; border-radius: 14px;
-    font-size: 14px; font-weight: 600;
-    cursor: pointer; transition: opacity 0.2s, background 0.2s;
-    letter-spacing: 0.01em;
+    width: 100%; padding: 12px; background: #7F77DD; color: #fff;
+    border: none; border-radius: 14px; font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: opacity 0.2s, background 0.2s; letter-spacing: 0.01em;
   }
   .continue-btn:hover:not(:disabled) { background: #6B63C8; }
   .continue-btn:disabled { opacity: 0.35; cursor: default; }
 
   /* LEGEND */
-  .legend {
-    width: 100%; max-width: 380px; margin-top: 20px;
-    display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
-  }
+  .legend { width: 100%; max-width: 380px; margin-top: 20px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
   .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #555; }
   .legend-dot { width: 9px; height: 9px; border-radius: 50%; }
 </style>
@@ -195,9 +157,7 @@
       </div>
       <div class="progress-bar-track"><div class="progress-bar-fill" id="progress"></div></div>
     </div>
-
     <div class="feed" id="feed"></div>
-
     <div class="phone-footer">
       <div class="footer-meta">
         <span class="type-badge" id="type-badge">—</span>
@@ -213,22 +173,18 @@
 <script>
 // ─────────────────────────────────────────────
 // MEDIA CONFIG
-// Drop your files into the matching folders and
-// update the paths below. Set a value to null if
-// a file doesn't exist yet.
+// Place files in matching folders, update paths.
+// Set null if file not ready yet.
 // ─────────────────────────────────────────────
 var MEDIA = [
-  { audio: 'audio/1.mp3',  image: null,         video: null },
-  { audio: 'audio/2.mp3',  image: 'images/2.jpg', video: null },
-  { audio: 'audio/3.mp3',  image: null,         video: 'videos/3.mp4' },
-  { audio: 'audio/4.mp3',  image: null,         video: null },
-  { audio: 'audio/5.mp3',  image: null,         video: null },
-  { audio: 'audio/6.mp3',  image: null,         video: null }
+  { audio: 'audio/1.mp3', image: null,           video: null },
+  { audio: 'audio/2.mp3', image: 'images/2.jpg', video: null },
+  { audio: 'audio/3.mp3', image: null,           video: 'videos/3.mp4' },
+  { audio: 'audio/4.mp3', image: null,           video: null },
+  { audio: 'audio/5.mp3', image: null,           video: null },
+  { audio: 'audio/6.mp3', image: null,           video: null }
 ];
 
-// ─────────────────────────────────────────────
-// LEVEL DATA
-// ─────────────────────────────────────────────
 var STEPS = [
   {
     type: 'mcq',
@@ -262,7 +218,7 @@ var STEPS = [
   }
 ];
 
-var CTA_LABEL = 'Show me my visualization →';
+var CTA_LABEL = 'Show me my visualization \u2192';
 
 var BADGE_STYLES = {
   text:       { bg: '#EEEDFE', color: '#534AB7', label: 'Text' },
@@ -270,53 +226,67 @@ var BADGE_STYLES = {
   text_video: { bg: '#FAEEDA', color: '#854F0B', label: 'Text + video' },
   mcq:        { bg: '#FAECE7', color: '#993C1D', label: 'Reflection' }
 };
+var DOT_COLORS = { text: '#534AB7', text_image: '#0F6E56', text_video: '#854F0B', mcq: '#993C1D' };
 
-var DOT_COLORS = {
-  text: '#534AB7', text_image: '#0F6E56',
-  text_video: '#854F0B', mcq: '#993C1D'
-};
-
-// ─────────────────────────────────────────────
-// STATE
-// ─────────────────────────────────────────────
 var curStep = 0;
 var mcqAnswered = false;
 var typingInProgress = false;
 var currentAudio = null;
 
-// ─────────────────────────────────────────────
-// AUDIO
-// ─────────────────────────────────────────────
-function playAudio(stepIdx) {
-  if (currentAudio) {
-    currentAudio.pause();
-    currentAudio.currentTime = 0;
-    currentAudio = null;
-  }
-  var m = MEDIA[stepIdx];
+// ── AUDIO ────────────────────────────────────
+function playAudio(idx) {
+  if (currentAudio) { currentAudio.pause(); currentAudio.currentTime = 0; currentAudio = null; }
+  var m = MEDIA[idx];
   if (!m || !m.audio) return;
-  var audio = new Audio(m.audio);
-  audio.play().catch(function() {});
-  currentAudio = audio;
+  var a = new Audio(m.audio);
+  a.play().catch(function() {});
+  currentAudio = a;
 }
 
-// ─────────────────────────────────────────────
-// CORE
-// ─────────────────────────────────────────────
+// ── PLACEHOLDER ──────────────────────────────
+function makePlaceholder(type, path) {
+  var el = document.createElement('div');
+  el.className = 'media-placeholder';
+  var isVid = (type === 'video');
+
+  var lbl = document.createElement('div');
+  lbl.className = 'placeholder-label';
+  lbl.style.color = isVid ? '#854F0B' : '#0F6E56';
+  lbl.textContent = isVid ? 'VIDEO \u00B7 5\u20137 SEC' : 'IMAGE';
+
+  var iconDiv = document.createElement('div');
+  iconDiv.innerHTML = isVid
+    ? '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#A09CC8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="15" height="14" rx="2"/><path d="M17 8l5 4-5 4V8z"/></svg>'
+    : '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#A09CC8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><circle cx="8.5" cy="9.5" r="1.5"/><path d="M21 15l-5-5L5 17"/></svg>';
+
+  var hint = document.createElement('div');
+  hint.style.cssText = 'color:#B8B4E0;font-size:11.5px';
+  hint.textContent = 'Asset not loaded yet';
+
+  el.appendChild(lbl);
+  el.appendChild(iconDiv);
+  el.appendChild(hint);
+
+  if (path) {
+    var p = document.createElement('div');
+    p.className = 'placeholder-path';
+    p.textContent = path;
+    el.appendChild(p);
+  }
+  return el;
+}
+
+// ── CORE ─────────────────────────────────────
 function restart() {
-  curStep = 0;
-  mcqAnswered = false;
-  typingInProgress = false;
+  curStep = 0; mcqAnswered = false; typingInProgress = false;
   if (currentAudio) { currentAudio.pause(); currentAudio = null; }
   document.getElementById('feed').innerHTML = '';
   document.getElementById('progress').style.width = '0%';
-  document.getElementById('type-badge').textContent = '—';
-  document.getElementById('type-badge').style.background = '';
-  document.getElementById('type-badge').style.color = '';
+  var b = document.getElementById('type-badge');
+  b.textContent = '\u2014'; b.style.background = ''; b.style.color = '';
   document.getElementById('step-counter').textContent = '0 / ' + STEPS.length;
   var btn = document.getElementById('continue-btn');
-  btn.textContent = 'Continue →';
-  btn.disabled = true;
+  btn.textContent = 'Continue \u2192'; btn.disabled = true;
   showStep();
 }
 
@@ -324,55 +294,38 @@ function showStep() {
   if (curStep >= STEPS.length) return;
   var step = STEPS[curStep];
   var feed = document.getElementById('feed');
-
-  // Fade previous containers
-  var rows = feed.querySelectorAll('.container-row, .mcq-row');
+  var rows = feed.querySelectorAll('.container-row,.mcq-row');
   for (var i = 0; i < rows.length; i++) rows[i].classList.add('faded');
-
   updateFooter(step);
   playAudio(curStep);
-
-  if (step.type === 'mcq') {
-    renderMCQ(step, feed);
-  } else {
-    renderText(step, feed);
-  }
-
+  if (step.type === 'mcq') renderMCQ(step, feed);
+  else renderText(step, feed);
   setTimeout(function() { feed.scrollTop = feed.scrollHeight; }, 80);
 }
 
 function updateFooter(step) {
-  var badge = BADGE_STYLES[step.type] || BADGE_STYLES['text'];
-  var badgeEl = document.getElementById('type-badge');
-  badgeEl.textContent = badge.label;
-  badgeEl.style.background = badge.bg;
-  badgeEl.style.color = badge.color;
-
+  var badge = BADGE_STYLES[step.type] || BADGE_STYLES.text;
+  var b = document.getElementById('type-badge');
+  b.textContent = badge.label; b.style.background = badge.bg; b.style.color = badge.color;
   document.getElementById('step-counter').textContent = (curStep + 1) + ' / ' + STEPS.length;
   document.getElementById('progress').style.width = (curStep / STEPS.length * 100) + '%';
-
   var btn = document.getElementById('continue-btn');
-  btn.textContent = (curStep === STEPS.length - 1) ? CTA_LABEL : 'Continue →';
+  btn.textContent = (curStep === STEPS.length - 1) ? CTA_LABEL : 'Continue \u2192';
   btn.disabled = (step.type === 'mcq') ? !mcqAnswered : true;
 }
 
 function advance() {
   if (typingInProgress) return;
-  var step = STEPS[curStep];
-  if (step.type === 'mcq' && !mcqAnswered) return;
+  if (STEPS[curStep].type === 'mcq' && !mcqAnswered) return;
   if (curStep === STEPS.length - 1) {
     document.getElementById('progress').style.width = '100%';
     document.getElementById('continue-btn').disabled = true;
     return;
   }
-  curStep++;
-  mcqAnswered = false;
-  showStep();
+  curStep++; mcqAnswered = false; showStep();
 }
 
-// ─────────────────────────────────────────────
-// RENDER — TEXT / TEXT+IMAGE / TEXT+VIDEO
-// ─────────────────────────────────────────────
+// ── RENDER TEXT / TEXT+IMAGE / TEXT+VIDEO ────
 function renderText(step, feed) {
   var row = document.createElement('div');
   row.className = 'container-row';
@@ -384,66 +337,76 @@ function renderText(step, feed) {
   var wrap = document.createElement('div');
   wrap.className = 'bubble-wrap';
 
-  // Speech bubble
   var bubble = document.createElement('div');
   bubble.className = 'speech-bubble';
   var inner = document.createElement('div');
   inner.className = 'bubble-inner';
 
-  var speakerIcon = document.createElement('div');
-  speakerIcon.className = 'speaker-icon';
-  speakerIcon.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="white"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" stroke="white" stroke-width="1.5" fill="none"/></svg>';
+  var spk = document.createElement('div');
+  spk.className = 'speaker-icon';
+  spk.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="white"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" stroke="white" stroke-width="1.5" fill="none"/></svg>';
 
   var textEl = document.createElement('div');
   textEl.className = 'bubble-text';
   var words = step.text.split(' ');
-  var stepIdx = curStep;
+  var si = curStep;
   for (var i = 0; i < words.length; i++) {
     var span = document.createElement('span');
-    span.id = 'w-' + stepIdx + '-' + i;
+    span.id = 'w-' + si + '-' + i;
     span.textContent = (i === 0 ? '' : ' ') + words[i];
     textEl.appendChild(span);
   }
 
-  inner.appendChild(speakerIcon);
+  inner.appendChild(spk);
   inner.appendChild(textEl);
   bubble.appendChild(inner);
   wrap.appendChild(bubble);
 
-  // Media
-  var m = MEDIA[stepIdx];
+  var m = MEDIA[si];
 
-  if (step.type === 'text_image' && m && m.image) {
-    var img = document.createElement('img');
-    img.className = 'media-image';
-    img.src = m.image;
-    img.alt = '';
-    wrap.appendChild(img);
+  if (step.type === 'text_image') {
+    if (m && m.image) {
+      var img = document.createElement('img');
+      img.className = 'media-image';
+      img.alt = '';
+      img.onerror = (function(w, path) {
+        return function() { this.style.display = 'none'; w.appendChild(makePlaceholder('image', path)); };
+      })(wrap, m.image);
+      img.src = m.image;
+      wrap.appendChild(img);
+    } else {
+      wrap.appendChild(makePlaceholder('image', null));
+    }
   }
 
-  if (step.type === 'text_video' && m && m.video) {
-    var vid = document.createElement('video');
-    vid.className = 'media-video';
-    vid.src = m.video;
-    vid.autoplay = true;
-    vid.loop = true;
-    vid.muted = true;
-    vid.setAttribute('playsinline', '');
-    wrap.appendChild(vid);
+  if (step.type === 'text_video') {
+    if (m && m.video) {
+      var vid = document.createElement('video');
+      vid.className = 'media-video';
+      vid.autoplay = true; vid.loop = true; vid.muted = true;
+      vid.setAttribute('playsinline', '');
+      vid.onerror = (function(w, path) {
+        return function() { this.style.display = 'none'; w.appendChild(makePlaceholder('video', path)); };
+      })(wrap, m.video);
+      vid.src = m.video;
+      wrap.appendChild(vid);
+    } else {
+      wrap.appendChild(makePlaceholder('video', null));
+    }
   }
 
   row.appendChild(avatar);
   row.appendChild(wrap);
   feed.appendChild(row);
 
-  // Typewriter
+  // Typewriter — 195ms/word
   typingInProgress = true;
   document.getElementById('continue-btn').disabled = true;
   var delay = 0;
   for (var j = 0; j < words.length; j++) {
-    (function(idx, si) {
+    (function(idx, stepI) {
       setTimeout(function() {
-        var el = document.getElementById('w-' + si + '-' + idx);
+        var el = document.getElementById('w-' + stepI + '-' + idx);
         if (el) el.style.opacity = '1';
         if (idx === words.length - 1) {
           typingInProgress = false;
@@ -451,14 +414,12 @@ function renderText(step, feed) {
           setTimeout(function() { feed.scrollTop = feed.scrollHeight; }, 40);
         }
       }, delay);
-    })(j, stepIdx);
-    delay += 130;
+    })(j, si);
+    delay += 195;
   }
 }
 
-// ─────────────────────────────────────────────
-// RENDER — MCQ
-// ─────────────────────────────────────────────
+// ── RENDER MCQ ───────────────────────────────
 function renderMCQ(step, feed) {
   var row = document.createElement('div');
   row.className = 'mcq-row';
@@ -470,10 +431,10 @@ function renderMCQ(step, feed) {
   var wrap = document.createElement('div');
   wrap.className = 'mcq-wrap';
 
-  var question = document.createElement('div');
-  question.className = 'mcq-question';
-  question.textContent = step.question;
-  wrap.appendChild(question);
+  var q = document.createElement('div');
+  q.className = 'mcq-question';
+  q.textContent = step.question;
+  wrap.appendChild(q);
 
   for (var i = 0; i < step.options.length; i++) {
     (function(optIdx) {
@@ -489,7 +450,6 @@ function renderMCQ(step, feed) {
   row.appendChild(wrap);
   row.appendChild(avatar);
   feed.appendChild(row);
-
   mcqAnswered = false;
   document.getElementById('continue-btn').disabled = true;
 }
@@ -505,9 +465,7 @@ function selectMCQ(stepIdx, selectedIdx, total) {
   document.getElementById('continue-btn').disabled = false;
 }
 
-// ─────────────────────────────────────────────
-// LEGEND
-// ─────────────────────────────────────────────
+// ── LEGEND ───────────────────────────────────
 function buildLegend() {
   var seen = {};
   for (var i = 0; i < STEPS.length; i++) seen[STEPS[i].type] = true;
@@ -519,10 +477,9 @@ function buildLegend() {
     var dot = document.createElement('div');
     dot.className = 'legend-dot';
     dot.style.background = DOT_COLORS[t] || '#999';
-    var label = document.createElement('span');
-    label.textContent = BADGE_STYLES[t].label;
-    item.appendChild(dot);
-    item.appendChild(label);
+    var lbl = document.createElement('span');
+    lbl.textContent = BADGE_STYLES[t].label;
+    item.appendChild(dot); item.appendChild(lbl);
     el.appendChild(item);
   }
 }
