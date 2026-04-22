@@ -399,7 +399,7 @@ function renderText(step, feed) {
   row.appendChild(wrap);
   feed.appendChild(row);
 
-  // Typewriter — 195ms/word
+  // Typewriter — 350ms/word
   typingInProgress = true;
   document.getElementById('continue-btn').disabled = true;
   var delay = 0;
@@ -415,7 +415,7 @@ function renderText(step, feed) {
         }
       }, delay);
     })(j, si);
-    delay += 254;
+    delay += 350;
   }
 }
 
