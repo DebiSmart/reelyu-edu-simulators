@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReelYou — Level 6 · Flow A</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #F0EFF8;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 32px 16px 48px;
+  }
+
+  .sim-title {
+    font-size: 13px; font-weight: 600; color: #7F77DD;
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 18px;
+  }
+
+  .phone-wrap { width: 100%; max-width: 380px; }
+
+  .phone {
+    width: 100%; height: 680px;
+    background: #F6F6F9;
+    border-radius: 40px;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.08);
+    display: flex; flex-direction: column; overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.8);
+  }
+
+  /* HEADER */
+  .phone-header {
+    background: #fff; padding: 14px 16px 0;
+    flex-shrink: 0; border-bottom: 0.5px solid #E8E8EC;
+  }
+  .header-row {
+    display: flex; align-items: center;
+    justify-content: space-between; margin-bottom: 10px;
+  }
+  .level-label { font-size: 12px; font-weight: 700; color: #7F77DD; letter-spacing: 0.05em; text-transform: uppercase; }
+  .level-sub { font-size: 11px; color: #999; margin-top: 1px; }
+  .restart-btn {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: #F0EFF8; border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; color: #7F77DD; flex-shrink: 0;
+  }
+  .restart-btn:hover { background: #E5E3F7; }
+  .progress-bar-track { height: 3px; background: #EEEDF8; border-radius: 2px; }
+  .progress-bar-fill { height: 3px; background: #7F77DD; border-radius: 2px; width: 0%; transition: width 0.4s ease; }
+
+  /* FEED */
+  .feed {
+    flex: 1; overflow-y: auto;
+    padding: 16px 14px 8px;
+    display: flex; flex-direction: column; gap: 14px;
+    scroll-behavior: smooth;
+  }
+  .feed::-webkit-scrollbar { width: 3px; }
+  .feed::-webkit-scrollbar-thumb { background: #D0CEF0; border-radius: 2px; }
+
+  /* CONTAINER ANIMATION */
+  .container-row {
+    display: flex; gap: 8px;
+    animation: slideUp 280ms ease forwards;
+    opacity: 0;
+    transition: opacity 0.4s ease, filter 0.4s ease;
+  }
+  .container-row.faded { opacity: 0.15; filter: grayscale(50%); }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* AVATARS */
+  .pico-avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: #C8E6C9; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; margin-top: 2px;
+  }
+  .pico-dot { width: 10px; height: 10px; border-radius: 50%; background: #4CAF50; }
+
+  .user-avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: #F0EFF8; flex-shrink: 0;
+    border: 1.5px dashed #B0ADE0;
+    display: flex; align-items: center; justify-content: center; margin-top: 2px;
+  }
+
+  /* BUBBLE */
+  .bubble-wrap { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+  .speech-bubble {
+    background: #fff; border: 0.5px solid #E0DFF0;
+    border-radius: 4px 14px 14px 14px;
+    padding: 10px 12px;
+    font-size: 13.5px; line-height: 1.55; color: #2A2840;
+    white-space: normal; word-wrap: break-word;
+  }
+  .bubble-inner { display: flex; align-items: flex-start; gap: 6px; }
+  .speaker-icon {
+    width: 16px; height: 16px; border-radius: 4px;
+    background: #4A7EDE; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; margin-top: 2px;
+  }
+  .bubble-text { flex: 1; min-width: 0; }
+  .bubble-text span { opacity: 0; transition: opacity 0.05s; }
+
+  /* IMAGE */
+  .media-image {
+    width: 100%; border-radius: 12px;
+    display: block; object-fit: cover;
+    max-height: 200px;
+    border: 0.5px solid #E0DFF0;
+  }
+
+  /* VIDEO */
+  .media-video {
+    width: 100%; border-radius: 12px;
+    display: block; object-fit: cover;
+    max-height: 200px;
+    background: #000;
+  }
+
+  /* MCQ */
+  .mcq-row {
+    display: flex; flex-direction: row-reverse; gap: 8px;
+    animation: slideUp 280ms ease forwards; opacity: 0;
+    transition: opacity 0.4s ease, filter 0.4s ease;
+  }
+  .mcq-row.faded { opacity: 0.15; filter: grayscale(50%); }
+  .mcq-wrap { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 7px; align-items: flex-end; }
+  .mcq-question { font-size: 13.5px; font-weight: 500; color: #2A2840; text-align: right; line-height: 1.45; word-wrap: break-word; }
+  .mcq-option {
+    width: 100%; background: #fff; border: 0.5px solid #D8D6EE;
+    border-radius: 10px; padding: 9px 12px;
+    font-size: 13px; line-height: 1.45; color: #2A2840;
+    text-align: left; cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, opacity 0.2s;
+    word-wrap: break-word; white-space: normal;
+  }
+  .mcq-option:hover:not(:disabled) { background: #F3F2FB; }
+  .mcq-option.selected { background: #7F77DD22; border-color: #7F77DD; font-weight: 500; }
+  .mcq-option.faded-opt { opacity: 0.35; }
+  .mcq-option:disabled { cursor: default; }
+
+  /* FOOTER */
+  .phone-footer {
+    background: #fff; border-top: 0.5px solid #E8E8EC;
+    padding: 10px 14px 14px; flex-shrink: 0;
+  }
+  .footer-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 9px; }
+  .type-badge { font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 20px; letter-spacing: 0.03em; }
+  .step-counter { font-size: 11px; color: #999; font-weight: 500; }
+  .continue-btn {
+    width: 100%; padding: 12px;
+    background: #7F77DD; color: #fff;
+    border: none; border-radius: 14px;
+    font-size: 14px; font-weight: 600;
+    cursor: pointer; transition: opacity 0.2s, background 0.2s;
+    letter-spacing: 0.01em;
+  }
+  .continue-btn:hover:not(:disabled) { background: #6B63C8; }
+  .continue-btn:disabled { opacity: 0.35; cursor: default; }
+
+  /* LEGEND */
+  .legend {
+    width: 100%; max-width: 380px; margin-top: 20px;
+    display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;
+  }
+  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #555; }
+  .legend-dot { width: 9px; height: 9px; border-radius: 50%; }
+</style>
+</head>
+<body>
+
+<div class="sim-title">Level 6 — Flow A</div>
+
+<div class="phone-wrap">
+  <div class="phone">
+    <div class="phone-header">
+      <div class="header-row">
+        <div>
+          <div class="level-label">Level 6</div>
+          <div class="level-sub">The Power of Visualization</div>
+        </div>
+        <button class="restart-btn" onclick="restart()" title="Restart">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-4"/>
+          </svg>
+        </button>
+      </div>
+      <div class="progress-bar-track"><div class="progress-bar-fill" id="progress"></div></div>
+    </div>
+
+    <div class="feed" id="feed"></div>
+
+    <div class="phone-footer">
+      <div class="footer-meta">
+        <span class="type-badge" id="type-badge">—</span>
+        <span class="step-counter" id="step-counter">0 / 6</span>
+      </div>
+      <button class="continue-btn" id="continue-btn" onclick="advance()" disabled>Continue →</button>
+    </div>
+  </div>
+</div>
+
+<div class="legend" id="legend"></div>
+
+<script>
+// ─────────────────────────────────────────────
+// MEDIA CONFIG
+// Drop your files into the matching folders and
+// update the paths below. Set a value to null if
+// a file doesn't exist yet.
+// ─────────────────────────────────────────────
+var MEDIA = [
+  { audio: 'audio/1.mp3',  image: null,         video: null },
+  { audio: 'audio/2.mp3',  image: 'images/2.jpg', video: null },
+  { audio: 'audio/3.mp3',  image: null,         video: 'videos/3.mp4' },
+  { audio: 'audio/4.mp3',  image: null,         video: null },
+  { audio: 'audio/5.mp3',  image: null,         video: null },
+  { audio: 'audio/6.mp3',  image: null,         video: null }
+];
+
+// ─────────────────────────────────────────────
+// LEVEL DATA
+// ─────────────────────────────────────────────
+var STEPS = [
+  {
+    type: 'mcq',
+    question: 'Before we start — where are you with visualization?',
+    options: [
+      'Never tried it. Not sure what it actually means.',
+      "I've heard of it, but always assumed it wasn't for me.",
+      "I've tried it here and there, but nothing stuck.",
+      "I believe in it — I just want to go deeper."
+    ]
+  },
+  {
+    type: 'text_image',
+    text: "Here's something most people don't know. Your brain cannot fully distinguish between a vividly imagined experience and a real one. The same neural pathways fire. The same muscles activate. The same feelings arise."
+  },
+  {
+    type: 'text_video',
+    text: 'Before every race, Michael Phelps would run a mental movie — stroke by stroke, breath by breath. He visualized the perfect race so many times, his body already knew what to do before he touched the water. His coach called it "the videotape."'
+  },
+  {
+    type: 'text',
+    text: "When you visualize consistently and emotionally, you build belief before the evidence arrives. You train your mind to recognize opportunity. You align your daily choices with the future you're already building in your head."
+  },
+  {
+    type: 'text',
+    text: "The feeling is the fuel. The more real it feels — the more powerfully it works. That's not philosophy. That's what the research keeps confirming."
+  },
+  {
+    type: 'text',
+    text: "Wherever you are with this — just starting or picking it back up — your visualizations here are built around your life, your goals, your vision. Your first one is ready."
+  }
+];
+
+var CTA_LABEL = 'Show me my visualization →';
+
+var BADGE_STYLES = {
+  text:       { bg: '#EEEDFE', color: '#534AB7', label: 'Text' },
+  text_image: { bg: '#E1F5EE', color: '#0F6E56', label: 'Text + image' },
+  text_video: { bg: '#FAEEDA', color: '#854F0B', label: 'Text + video' },
+  mcq:        { bg: '#FAECE7', color: '#993C1D', label: 'Reflection' }
+};
+
+var DOT_COLORS = {
+  text: '#534AB7', text_image: '#0F6E56',
+  text_video: '#854F0B', mcq: '#993C1D'
+};
+
+// ─────────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────────
+var curStep = 0;
+var mcqAnswered = false;
+var typingInProgress = false;
+var currentAudio = null;
+
+// ─────────────────────────────────────────────
+// AUDIO
+// ─────────────────────────────────────────────
+function playAudio(stepIdx) {
+  if (currentAudio) {
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio = null;
+  }
+  var m = MEDIA[stepIdx];
+  if (!m || !m.audio) return;
+  var audio = new Audio(m.audio);
+  audio.play().catch(function() {});
+  currentAudio = audio;
+}
+
+// ─────────────────────────────────────────────
+// CORE
+// ─────────────────────────────────────────────
+function restart() {
+  curStep = 0;
+  mcqAnswered = false;
+  typingInProgress = false;
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+  document.getElementById('feed').innerHTML = '';
+  document.getElementById('progress').style.width = '0%';
+  document.getElementById('type-badge').textContent = '—';
+  document.getElementById('type-badge').style.background = '';
+  document.getElementById('type-badge').style.color = '';
+  document.getElementById('step-counter').textContent = '0 / ' + STEPS.length;
+  var btn = document.getElementById('continue-btn');
+  btn.textContent = 'Continue →';
+  btn.disabled = true;
+  showStep();
+}
+
+function showStep() {
+  if (curStep >= STEPS.length) return;
+  var step = STEPS[curStep];
+  var feed = document.getElementById('feed');
+
+  // Fade previous containers
+  var rows = feed.querySelectorAll('.container-row, .mcq-row');
+  for (var i = 0; i < rows.length; i++) rows[i].classList.add('faded');
+
+  updateFooter(step);
+  playAudio(curStep);
+
+  if (step.type === 'mcq') {
+    renderMCQ(step, feed);
+  } else {
+    renderText(step, feed);
+  }
+
+  setTimeout(function() { feed.scrollTop = feed.scrollHeight; }, 80);
+}
+
+function updateFooter(step) {
+  var badge = BADGE_STYLES[step.type] || BADGE_STYLES['text'];
+  var badgeEl = document.getElementById('type-badge');
+  badgeEl.textContent = badge.label;
+  badgeEl.style.background = badge.bg;
+  badgeEl.style.color = badge.color;
+
+  document.getElementById('step-counter').textContent = (curStep + 1) + ' / ' + STEPS.length;
+  document.getElementById('progress').style.width = (curStep / STEPS.length * 100) + '%';
+
+  var btn = document.getElementById('continue-btn');
+  btn.textContent = (curStep === STEPS.length - 1) ? CTA_LABEL : 'Continue →';
+  btn.disabled = (step.type === 'mcq') ? !mcqAnswered : true;
+}
+
+function advance() {
+  if (typingInProgress) return;
+  var step = STEPS[curStep];
+  if (step.type === 'mcq' && !mcqAnswered) return;
+  if (curStep === STEPS.length - 1) {
+    document.getElementById('progress').style.width = '100%';
+    document.getElementById('continue-btn').disabled = true;
+    return;
+  }
+  curStep++;
+  mcqAnswered = false;
+  showStep();
+}
+
+// ─────────────────────────────────────────────
+// RENDER — TEXT / TEXT+IMAGE / TEXT+VIDEO
+// ─────────────────────────────────────────────
+function renderText(step, feed) {
+  var row = document.createElement('div');
+  row.className = 'container-row';
+
+  var avatar = document.createElement('div');
+  avatar.className = 'pico-avatar';
+  avatar.innerHTML = '<div class="pico-dot"></div>';
+
+  var wrap = document.createElement('div');
+  wrap.className = 'bubble-wrap';
+
+  // Speech bubble
+  var bubble = document.createElement('div');
+  bubble.className = 'speech-bubble';
+  var inner = document.createElement('div');
+  inner.className = 'bubble-inner';
+
+  var speakerIcon = document.createElement('div');
+  speakerIcon.className = 'speaker-icon';
+  speakerIcon.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="white"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07" stroke="white" stroke-width="1.5" fill="none"/></svg>';
+
+  var textEl = document.createElement('div');
+  textEl.className = 'bubble-text';
+  var words = step.text.split(' ');
+  var stepIdx = curStep;
+  for (var i = 0; i < words.length; i++) {
+    var span = document.createElement('span');
+    span.id = 'w-' + stepIdx + '-' + i;
+    span.textContent = (i === 0 ? '' : ' ') + words[i];
+    textEl.appendChild(span);
+  }
+
+  inner.appendChild(speakerIcon);
+  inner.appendChild(textEl);
+  bubble.appendChild(inner);
+  wrap.appendChild(bubble);
+
+  // Media
+  var m = MEDIA[stepIdx];
+
+  if (step.type === 'text_image' && m && m.image) {
+    var img = document.createElement('img');
+    img.className = 'media-image';
+    img.src = m.image;
+    img.alt = '';
+    wrap.appendChild(img);
+  }
+
+  if (step.type === 'text_video' && m && m.video) {
+    var vid = document.createElement('video');
+    vid.className = 'media-video';
+    vid.src = m.video;
+    vid.autoplay = true;
+    vid.loop = true;
+    vid.muted = true;
+    vid.setAttribute('playsinline', '');
+    wrap.appendChild(vid);
+  }
+
+  row.appendChild(avatar);
+  row.appendChild(wrap);
+  feed.appendChild(row);
+
+  // Typewriter
+  typingInProgress = true;
+  document.getElementById('continue-btn').disabled = true;
+  var delay = 0;
+  for (var j = 0; j < words.length; j++) {
+    (function(idx, si) {
+      setTimeout(function() {
+        var el = document.getElementById('w-' + si + '-' + idx);
+        if (el) el.style.opacity = '1';
+        if (idx === words.length - 1) {
+          typingInProgress = false;
+          document.getElementById('continue-btn').disabled = false;
+          setTimeout(function() { feed.scrollTop = feed.scrollHeight; }, 40);
+        }
+      }, delay);
+    })(j, stepIdx);
+    delay += 130;
+  }
+}
+
+// ─────────────────────────────────────────────
+// RENDER — MCQ
+// ─────────────────────────────────────────────
+function renderMCQ(step, feed) {
+  var row = document.createElement('div');
+  row.className = 'mcq-row';
+
+  var avatar = document.createElement('div');
+  avatar.className = 'user-avatar';
+  avatar.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="#B0ADE0"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+
+  var wrap = document.createElement('div');
+  wrap.className = 'mcq-wrap';
+
+  var question = document.createElement('div');
+  question.className = 'mcq-question';
+  question.textContent = step.question;
+  wrap.appendChild(question);
+
+  for (var i = 0; i < step.options.length; i++) {
+    (function(optIdx) {
+      var btn = document.createElement('button');
+      btn.className = 'mcq-option';
+      btn.id = 'mcq-opt-' + curStep + '-' + optIdx;
+      btn.textContent = step.options[optIdx];
+      btn.onclick = function() { selectMCQ(curStep, optIdx, step.options.length); };
+      wrap.appendChild(btn);
+    })(i);
+  }
+
+  row.appendChild(wrap);
+  row.appendChild(avatar);
+  feed.appendChild(row);
+
+  mcqAnswered = false;
+  document.getElementById('continue-btn').disabled = true;
+}
+
+function selectMCQ(stepIdx, selectedIdx, total) {
+  mcqAnswered = true;
+  for (var i = 0; i < total; i++) {
+    var btn = document.getElementById('mcq-opt-' + stepIdx + '-' + i);
+    if (!btn) continue;
+    btn.disabled = true;
+    btn.classList.add(i === selectedIdx ? 'selected' : 'faded-opt');
+  }
+  document.getElementById('continue-btn').disabled = false;
+}
+
+// ─────────────────────────────────────────────
+// LEGEND
+// ─────────────────────────────────────────────
+function buildLegend() {
+  var seen = {};
+  for (var i = 0; i < STEPS.length; i++) seen[STEPS[i].type] = true;
+  var el = document.getElementById('legend');
+  for (var t in seen) {
+    if (!BADGE_STYLES[t]) continue;
+    var item = document.createElement('div');
+    item.className = 'legend-item';
+    var dot = document.createElement('div');
+    dot.className = 'legend-dot';
+    dot.style.background = DOT_COLORS[t] || '#999';
+    var label = document.createElement('span');
+    label.textContent = BADGE_STYLES[t].label;
+    item.appendChild(dot);
+    item.appendChild(label);
+    el.appendChild(item);
+  }
+}
+
+buildLegend();
+showStep();
+</script>
+</body>
+</html>
